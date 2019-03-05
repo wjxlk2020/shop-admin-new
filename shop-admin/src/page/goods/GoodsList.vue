@@ -9,7 +9,7 @@
 
       <!-- 搜索框 -->
       <div>
-        <el-input placeholder="请输入内容" class="input-with-select">
+        <el-input placeholder="请输入内容" v-model="searchValue" class="input-with-select">
           <el-button slot="append" icon="el-icon-search"></el-button>
         </el-input>
       </div>
@@ -18,6 +18,10 @@
     <!-- 表格 -->
     <!-- data用于接收表格数据，tableData是data中的数据，由后台返回的 -->
     <el-table :data="tableData" style="width: 100%;" class="mt20" @selection-change="handleSelectionChange">
+      
+       <!-- 表格的多选 -->
+      <el-table-column type="selection" width="55"></el-table-column>
+      
       <!-- 每一列的数据, prop定义数据结构对象要显示的属性 -->
       <el-table-column label="标题" width="180" prop="title"></el-table-column>
 
@@ -70,14 +74,17 @@ export default {
       // 搜索条件
       searchValue: "",
       // 数据总条数
-      totalCount: 0
+      totalCount: 0,
+
+      // 保存要删除的商品
+      idsStr: ""
     };
   },
 
   mounted () {
     // 请求商品的数据
     this.$axios.get(`http://localhost:8899/admin/goods/getlist?pageIndex=
-    ${this.pageIndex}&pageSize=${this.pageSize}&searchValue=
+    ${this.pageIndex}&pageSize=${this.pageSize}&searchvalue=
     ${this.searchValue}`).then( res => {
       // 获取返回的数据
       const {data} = res;
